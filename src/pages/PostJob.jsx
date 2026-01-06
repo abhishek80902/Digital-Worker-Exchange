@@ -159,6 +159,12 @@ const Pill = ({ children }) => (
   </div>
 );
 
+function getInitials(name = "") {
+  const parts = name.trim().split(" ");
+  if (parts.length === 1) return parts[0][0].toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 export default function PostJob() {
   const navigate = useNavigate();
 
@@ -373,11 +379,12 @@ export default function PostJob() {
                     key={w.id}
                     className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 shadow-sm"
                   >
-                    <img
-                      src={w.avatar}
-                      alt={w.name}
-                      className="w-16 h-16 rounded-full object-cover ring-1 ring-white shadow"
-                    />
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center 
+                bg-gradient-to-br from-purple-600 to-orange-500 
+                text-white font-bold text-xl shadow ring-1 ring-white">
+  {getInitials(w.name)}
+</div>
+
 
                     <div className="flex-1">
                       <div className="flex items-start justify-between">

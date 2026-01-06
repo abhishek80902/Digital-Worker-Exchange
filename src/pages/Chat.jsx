@@ -5,6 +5,12 @@ import { Link, useParams } from "react-router-dom";
 
 import MOCK_WORKERS from "../utils/mockWorkers";
 
+function getInitials(name = "") {
+  const parts = name.trim().split(" ");
+  if (parts.length === 1) return parts[0][0].toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 const Chat = () => {
   const { id } = useParams();
 
@@ -61,11 +67,12 @@ const Chat = () => {
           <ArrowLeft size={24} className="text-slate-700" />
         </Link>
 
-        <img
-          src={worker.avatar}
-          alt="avatar"
-          className="w-11 h-11 rounded-full object-cover border border-slate-200"
-        />
+        <div className="w-11 h-11 rounded-full flex items-center justify-center 
+                bg-gradient-to-br from-purple-600 to-orange-500 
+                text-white font-bold text-sm shadow">
+  {getInitials(worker.name)}
+</div>
+
 
         <div>
           <h2 className="font-semibold text-slate-900 text-sm">
@@ -83,11 +90,12 @@ const Chat = () => {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
             {msg.from === "worker" && (
-              <img
-                src={worker.avatar}
-                className="w-8 h-8 rounded-full mr-2"
-                alt="worker"
-              />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center 
+                bg-gradient-to-br from-purple-600 to-orange-500 
+                text-white font-semibold text-xs mr-2">
+  {getInitials(worker.name)}
+</div>
+
             )}
 
             <div

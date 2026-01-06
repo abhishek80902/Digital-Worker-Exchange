@@ -122,7 +122,7 @@ const HeroSection = () => {
 
           <div className="overflow-hidden rounded-[32px] bg-slate-900/5 border border-white/80 shadow-2xl -mt-20">
             <img
-              src="/images/worker9.png"
+              src="/images/poland65df15668f317.jpg"
               alt="Skilled workers"
               className="w-[420px] h-[420px] md:w-[460px] md:h-[460px] object-cover"
             />

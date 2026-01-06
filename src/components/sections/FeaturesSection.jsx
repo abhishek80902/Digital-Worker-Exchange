@@ -54,7 +54,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="bg-[#f7fafc] py-20">
+    <section className="bg-[#f7fafc] py-2">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
           <span className="inline-flex items-center px-4 py-1 rounded-full bg-emerald-50 text-emerald-700 text-sm font-medium mb-4">
