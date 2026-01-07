@@ -20,9 +20,9 @@ const WorkerProfile = () => {
     skills: ["Wiring", "Panel Installation", "Troubleshooting", "Safety"],
     bio: "Skilled residential electrician with experience in home wiring, safety compliance, electrical panel installation and maintenance.",
     portfolio: [
-      "/images/job1.jpg",
-      "/images/job2.jpg",
-      "/images/job3.jpg",
+      "/images/worker6.webp",
+      "/images/worker7.jpg",
+      "/images/worker8.webp",
     ],
     reviews: [
       {
