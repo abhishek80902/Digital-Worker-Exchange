@@ -1,8 +1,19 @@
 import React from "react";
 import { MapPin, Star, ArrowLeft, CheckCircle, Briefcase, MessageSquare, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import MOCK_WORKERS from "../utils/mockWorkers";
+
 
 const WorkerProfile = () => {
+
+   const { id } = useParams();
+  const navigate = useNavigate();
+
+    const workerA = MOCK_WORKERS.find((w) => w.id === id);
+
+  if (!workerA) return <div>Worker not found</div>;
 
   // Mock data — replace with backend data later
   const worker = {
@@ -99,13 +110,20 @@ const WorkerProfile = () => {
 
             {/* Buttons */}
             <div className="mt-6 flex flex-wrap gap-4">
-              <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg transition flex items-center gap-2">
-                <Briefcase size={18} /> Hire
-              </button>
+              <button
+  onClick={() => navigate(`/hire/${workerA.id}`)}
+  className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold shadow-md flex items-center gap-2"
+>
+  <Briefcase size={18} /> Hire
+</button>
 
-              <button className="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition flex items-center gap-2">
-                <MessageSquare size={18} /> Chat
-              </button>
+<button
+  onClick={() => navigate(`/chat/${workerA.id}`)}
+  className="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold flex items-center gap-2"
+>
+  <MessageSquare size={18} /> Chat
+</button>
+
             </div>
           </div>
         </div>

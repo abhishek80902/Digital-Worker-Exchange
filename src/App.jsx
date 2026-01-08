@@ -21,6 +21,8 @@ import EmployerDashboard from "./pages/employer/EmployerDashboard";
 import WorkerProfileEdit from "./pages/worker/WorkerProfileEdit";
 import EmployerJobApplicants from "./pages/employer/EmployerJobApplicants";
 import Notifications from "./pages/Notifications";
+import HireWorker from "./pages/HireWorker";
+import HireSuccess from "./pages/HireSuccess";
 
 function App() {
   return (
@@ -49,6 +51,9 @@ function App() {
           <Route path="/worker/profile/edit" element={<WorkerProfileEdit />} />
           <Route path="/employer/job/:id/applicants" element={<EmployerJobApplicants />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/hire/:id" element={<HireWorker />} />
+          <Route path="/hire-success/:id" element={<HireSuccess />} />
+
         </Routes>
       </main>
     </Router>
