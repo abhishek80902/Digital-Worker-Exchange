@@ -38,10 +38,11 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md min-h-[520px] flex flex-col justify-center py-12">
 
         <h1 className="text-3xl font-extrabold text-slate-900 text-center">
-          <h1>Welcome!</h1>
+          <h1 className="text-4xl font-extrabold text-slate-900 text-center">Welcome!</h1>
+          <br />
           Login to Your Account
         </h1>
 

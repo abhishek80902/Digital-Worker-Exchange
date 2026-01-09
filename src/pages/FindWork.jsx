@@ -7,10 +7,10 @@ const categories = [
   { title: "Electrician", jobs: "45 jobs", icon: "⚡" },
   { title: "Plumber", jobs: "38 jobs", icon: "🔧" },
   { title: "Driver", jobs: "62 jobs", icon: "🚗" },
-  { title: "Carpenter", jobs: "29 jobs", icon: "🪚" },
+  { title: "Maid", jobs: "29 jobs", icon: "👩🏻‍⚖️" },
   { title: "Mason", jobs: "41 jobs", icon: "🧱" },
   { title: "Painter", jobs: "33 jobs", icon: "🎨" },
-  { title: "Technician", jobs: "27 jobs", icon: "🔌" },
+  { title: "Guard", jobs: "27 jobs", icon: "🔌" },
   { title: "Delivery", jobs: "54 jobs", icon: "📦" },
 ];
 
