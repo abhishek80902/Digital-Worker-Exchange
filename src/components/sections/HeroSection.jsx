@@ -34,7 +34,7 @@ const HeroSection = () => {
   Empowering{" "}
   <span className="relative inline-block w-[220px] lg:w-[260px]">
     <span className="invisible absolute">Careers</span>
-    <span className="absolute bottom-0 left-0 text-purple-600 drop-shadow-sm">
+    <span className="absolute bottom-0 left-0 text-teal-600 drop-shadow-sm">
       <Typewriter
         options={{
           strings: ["Workers", "Hands", "Careers"],
