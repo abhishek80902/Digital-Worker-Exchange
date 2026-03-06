@@ -1,6 +1,7 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -16,15 +17,31 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSignup() {
-    // Save user role for login redirection
-    localStorage.setItem("role", role);
-    localStorage.setItem("user", JSON.stringify(form));
+async function handleSignup() {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...form,
+        role, // ✅ TAKE ROLE FROM BUTTON STATE
+      }),
+    });
 
-    alert("Signup successful!");
+    const data = await res.json();
 
-    navigate("/login"); // redirect to login
+    if (!res.ok) {
+      alert(data.message);
+      return;
+    }
+
+    alert("Signup successful! Please login.");
+    navigate("/login");
+  } catch (err) {
+    alert("Server error");
   }
+}
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">

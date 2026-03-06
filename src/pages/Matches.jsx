@@ -2,14 +2,21 @@
 import React, { useMemo } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import MOCK_WORKERS from "../utils/mockWorkers"; // you can move the array here or import
+
+// import MOCK_WORKERS from "../utils/mockWorkers"; // you can move the array here or import
 
 import computeMatchScore from "../utils/matchAlgorithm"; // same code as PostJob
 
 const Matches = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [workers, setWorkers] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+
 
   // Read query params from PostJob.jsx
   const params = new URLSearchParams(location.search);
@@ -20,17 +27,65 @@ const Matches = () => {
 
   const job = { trade, minPay, maxPay, title };
 
+  useEffect(() => {
+  const fetchWorkers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/workers", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to fetch workers");
+      }
+
+      setWorkers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchWorkers();
+}, []);
+
+
+const matches = workers;
+
   // Compute matches again
-  const matches = useMemo(() => {
-    const arr = MOCK_WORKERS.map((w) => ({
-      ...w,
-      score: computeMatchScore(w, job),
-    }));
-    arr.sort((a, b) => b.score - a.score || b.rating - a.rating);
-    return arr;
-  }, [trade, minPay, maxPay, title]);
+  // const matches = useMemo(() => {
+  //   const arr = MOCK_WORKERS.map((w) => ({
+  //     ...w,
+  //     score: computeMatchScore(w, job),
+  //   }));
+  //   arr.sort((a, b) => b.score - a.score || b.rating - a.rating);
+  //   return arr;
+  // }, [trade, minPay, maxPay, title]);
+
+    if (loading) {
+    return (
+      <div className="pt-40 text-center text-slate-600">
+        Loading matched workers...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="pt-40 text-center text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
+    
     <div className="min-h-screen bg-white pt-28 pb-20 px-6">
       
       {/* BACK BUTTON */}
@@ -117,14 +172,14 @@ const Matches = () => {
             {/* Buttons */}
             <div className="mt-5 flex gap-3">
               <button
-                onClick={() => navigate(`/chat/${w.id}?from=matches`)}
+                onClick={() => navigate(`/chat/${w._id}?from=matches`)}
                 className="flex-1 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-sm hover:shadow-md"
               >
                 Chat
               </button>
 
               <button
-                onClick={() => navigate(`/worker/${w.id}?from=matches`)}
+                onClick={() => navigate(`/worker/${w._id}?from=matches`)}
                 className="flex-1 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white shadow"
               >
                 Hire

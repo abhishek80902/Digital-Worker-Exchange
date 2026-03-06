@@ -10,31 +10,40 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleLogin() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const role = localStorage.getItem("role");
+  async function handleLogin() {
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
 
-    if (!user || user.email !== form.email) {
-      alert("User not found. Please sign up first.");
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
       return;
     }
 
-    if (user.password !== form.password) {
-      alert("Incorrect password.");
-      return;
-    }
+    // ✅ Store token & user
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
 
     alert("Login Successful!");
 
-    // REDIRECT BASED ON ROLE
-    if (role === "worker") {
+    // ✅ Redirect based on role
+    if (data.user.role === "worker") {
       navigate("/worker/dashboard");
-    } else if (role === "employer") {
-      navigate("/employer/jobs");
     } else {
-      navigate("/");
+      navigate("/employer/jobs");
     }
+  } catch (err) {
+    alert("Server error. Try again.");
   }
+}
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">

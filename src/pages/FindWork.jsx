@@ -1,246 +1,195 @@
-// src/pages/FindWork.jsx
-import React from "react";
-import { Search, MapPin, Mic } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const categories = [
-  { title: "Electrician", jobs: "45 jobs", icon: "⚡" },
-  { title: "Plumber", jobs: "38 jobs", icon: "🔧" },
-  { title: "Driver", jobs: "62 jobs", icon: "🚗" },
-  { title: "Maid", jobs: "29 jobs", icon: "👩🏻‍⚖️" },
-  { title: "Mason", jobs: "41 jobs", icon: "🧱" },
-  { title: "Painter", jobs: "33 jobs", icon: "🎨" },
-  { title: "Guard", jobs: "27 jobs", icon: "🔌" },
-  { title: "Delivery", jobs: "54 jobs", icon: "📦" },
-];
-
-const aiJobs = [
-  {
-    id: 1,
-    title: "Electrician Needed",
-    employer: "BuildPro Construction",
-    salary: "₹500-700/day",
-    location: "Mumbai, Maharashtra",
-    type: "Full-time",
-    tags: ["Wiring", "Panel Installation", "Safety"],
-    time: "2 days ago",
-  },
-  {
-    id: 2,
-    title: "Plumber Required",
-    employer: "HomeServe Solutions",
-    salary: "₹400-600/day",
-    location: "Delhi NCR",
-    type: "Contract",
-    tags: ["Pipe Fitting", "Repair", "Maintenance"],
-    time: "1 day ago",
-  },
-  {
-    id: 3,
-    title: "Delivery Driver",
-    employer: "QuickShip Logistics",
-    salary: "₹300-500/day",
-    location: "Bangalore",
-    type: "Part-time",
-    tags: ["Driving", "Delivery", "Navigation"],
-    time: "3 hours ago",
-  },
-];
-
-const nearbyJobs = [
-  {
-    id: 4,
-    title: "Home Cleaner",
-    employer: "UrbanHome Services",
-    salary: "₹400/day",
-    location: "near you",
-    type: "Part-time",
-    tags: ["Cleaning", "Housekeeping"],
-    time: "5 hours ago",
-  },
-  {
-    id: 5,
-    title: "Cook for Home",
-    employer: "Private Employer",
-    salary: "₹500/day",
-    location: "near you",
-    type: "Contract",
-    tags: ["Cooking", "Kitchen Help"],
-    time: "12 hours ago",
-  },
-  {
-    id: 6,
-    title: "Construction Helper",
-    employer: "BuildRight Co.",
-    salary: "₹450/day",
-    location: "near you",
-    type: "Daily Wage",
-    tags: ["Labour", "Construction"],
-    time: "1 day ago",
-  },
+  { title: "Electrician", icon: "⚡" },
+  { title: "Plumber", icon: "🔧" },
+  { title: "Driver", icon: "🚗" },
+  { title: "Maid", icon: "👩🏻‍⚖️" },
+  { title: "Mason", icon: "🧱" },
+  { title: "Painter", icon: "🎨" },
+  { title: "Guard", icon: "🛡️" },
+  { title: "Delivery", icon: "📦" },
 ];
 
 const FindWork = () => {
+  /* -------------------- STATE -------------------- */
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  /* -------------------- FETCH (PUBLIC) -------------------- */
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/jobs");
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch jobs");
+        }
+
+        const data = await res.json();
+        setJobs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  /* -------------------- STATES -------------------- */
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 pt-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <SkeletonJobGrid />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (jobs.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 pt-32 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-slate-900">
+            No jobs available right now
+          </h2>
+          <p className="text-slate-600 mt-2">
+            New jobs are posted frequently. Please check back later.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  /* -------------------- UI -------------------- */
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50">
 
-      {/* HERO + SEARCH */}
-      <section className="pt-32 pb-16 px-6 bg-gradient-to-br from-purple-600/10 to-orange-500/10">
-        <div className="max-w-5xl mx-auto text-center">
+      {/* HERO */}
+      <section className="pt-20 pb-8 px-6 bg-gradient-to-br from-purple-50 via-white to-orange-50 border-b">
+        <div className="max-w-6xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border mb-4">
+            <span>⚡</span>
+            <span className="text-sm text-slate-600">
+              Live local jobs
+            </span>
+          </div>
 
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900">
-            Find the Best Jobs Near You
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">
+            Find work that pays today
           </h1>
 
-          <p className="text-slate-600 mt-3 text-lg">
-            Search jobs by skill, location, wage, and more.
+          <p className="text-slate-600 mt-2">
+            {jobs.length} active jobs · Verified employers · Clear daily wages
           </p>
-
-          {/* Premium Search Bar */}
-          <div className="mt-8 bg-white rounded-3xl shadow-xl p-6 border border-slate-200 
-          flex flex-col md:flex-row gap-4">
-
-            {/* Skill Input */}
-            <div className="flex items-center gap-3 flex-grow bg-slate-50 px-4 py-3 rounded-2xl">
-              <Search size={20} className="text-slate-500" />
-              <input
-                type="text"
-                placeholder="Search by skill (Electrician, Driver...)"
-                className="bg-transparent w-full outline-none text-slate-700"
-              />
-            </div>
-
-            {/* Location Input */}
-            <div className="flex items-center gap-3 flex-grow bg-slate-50 px-4 py-3 rounded-2xl">
-              <MapPin size={20} className="text-slate-500" />
-              <input
-                type="text"
-                placeholder="Enter your location…"
-                className="bg-transparent w-full outline-none text-slate-700"
-              />
-            </div>
-
-            {/* Search Button */}
-            <button className="px-8 py-3 rounded-2xl bg-[#00796b] text-white font-semibold shadow-md hover:bg-[#00695c] transition">
-              Search Jobs
-            </button>
-
-            {/* Voice */}
-            <button className="px-6 py-3 rounded-2xl bg-[#ffa74f] text-white shadow-md hover:bg-[#ff8f24] transition">
-              <Mic size={20} />
-            </button>
-
-          </div>
         </div>
       </section>
 
       {/* CATEGORIES */}
-      <section className="py-16 px-6 max-w-6xl mx-auto">
-        <h2 className="text-2xl font-bold text-slate-900 mb-8">
-          Browse by Category
-        </h2>
+      <section className="-mt-4 py-6 px-6">
+        <div className="max-w-6xl mx-auto bg-white rounded-3xl border p-5">
+          <p className="text-sm font-semibold text-slate-700 mb-3">
+            Browse by skill
+          </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {categories.map((cat, i) => (
-            <div
-              key={i}
-              className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm hover:shadow-xl 
-              transition hover:-translate-y-1 text-center cursor-pointer"
-            >
-              <div className="text-4xl mb-2">{cat.icon}</div>
-              <p className="font-semibold text-slate-800">{cat.title}</p>
-              <p className="text-sm text-slate-500">{cat.jobs}</p>
-            </div>
-          ))}
+          <div className="flex flex-wrap gap-3">
+            {categories.map((cat, i) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border hover:bg-slate-100 text-sm cursor-pointer"
+              >
+                <span>{cat.icon}</span>
+                <span className="font-medium">{cat.title}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* AI RECOMMENDED */}
-      <section className="py-16 px-6 bg-slate-50 border-y border-slate-200">
+      {/* JOB LIST */}
+      <section className="py-12 px-6">
         <div className="max-w-6xl mx-auto">
 
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="text-yellow-500 text-xl">✨</span>
-            AI Recommended Jobs
-          </h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-slate-900">
+              Available jobs
+            </h2>
+            <span className="text-sm text-slate-500">
+              Updated recently
+            </span>
+          </div>
 
-          <JobPreviewGrid jobs={aiJobs} />
+          <JobPreviewGrid jobs={jobs} />
         </div>
       </section>
-
-      {/* NEARBY JOBS */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-
-          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="text-green-500 text-xl">📍</span>
-            Nearby Jobs
-          </h2>
-
-          <JobPreviewGrid jobs={nearbyJobs} />
-        </div>
-      </section>
-
-      {/* VIEW ALL JOBS */}
-      <div className="text-center py-10">
-        <Link
-          to="/jobs"
-          className="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold shadow-lg hover:shadow-xl transition"
-        >
-          View All Available Jobs →
-        </Link>
-      </div>
 
     </div>
   );
 };
 
+/* -------------------- COMPONENTS -------------------- */
+
 const JobPreviewGrid = ({ jobs }) => (
-  <div className="grid md:grid-cols-3 gap-6">
-    {jobs.map((job, i) => (
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {jobs.map((job) => (
       <div
-        key={i}
-        className="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm hover:shadow-xl transition"
+        key={job._id}
+        className="bg-white rounded-3xl border p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition"
       >
-        <h3 className="text-lg font-bold text-slate-900">{job.title}</h3>
-        <p className="text-slate-600 text-sm">{job.employer}</p>
+        <div className="flex justify-between">
+          <div className="text-emerald-600 font-extrabold text-xl">
+            ₹{job.minPay} – ₹{job.maxPay}
+            <span className="text-sm text-slate-500"> /day</span>
+          </div>
 
-        <div className="mt-3 grid gap-1">
-          <div className="text-emerald-600 font-semibold">{job.salary}</div>
-          <div className="text-sm text-slate-600">📍 {job.location}</div>
-        </div>
-
-        <div className="mt-3">
-          <span className="px-3 py-1 rounded-full text-xs bg-slate-200 text-slate-700">
-            {job.type}
+          <span className="px-3 py-1 rounded-full text-xs bg-orange-100 text-orange-600">
+            Hiring now
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-4">
-          {job.tags.map((tag, idx) => (
-            <span
-              key={idx}
-              className="px-3 py-1 rounded-full text-xs bg-slate-100 text-slate-700"
-            >
-              {tag}
-            </span>
-          ))}
+        <h3 className="mt-4 text-lg font-bold text-slate-900">
+          {job.title}
+        </h3>
+
+        <div className="mt-2 space-y-1 text-sm text-slate-600">
+          <p>📍 {job.location}</p>
+          <p>👷 {job.trade}</p>
+          <p>🏢 {job.employer?.name || "Employer"}</p>
         </div>
 
-        <div className="text-xs text-slate-500 mt-3">
-          🕒 {job.time}
-        </div>
+        <Link to={`/job/${job._id}`}>
+          <button className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold">
+            View & Apply
+          </button>
+        </Link>
+      </div>
+    ))}
+  </div>
+);
 
-        <Link to={`/job/${job.id}`}>
-  <button className="mt-5 w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-orange-500 text-white font-semibold shadow-md hover:shadow-lg transition">
-    Apply Now
-  </button>
-</Link>
-
+const SkeletonJobGrid = () => (
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {Array.from({ length: 6 }).map((_, i) => (
+      <div key={i} className="bg-white rounded-3xl border p-6 animate-pulse">
+        <div className="h-6 w-32 bg-slate-200 rounded mb-4"></div>
+        <div className="h-5 w-3/4 bg-slate-200 rounded mb-4"></div>
+        <div className="h-12 bg-slate-200 rounded-xl"></div>
       </div>
     ))}
   </div>
 );
 
 export default FindWork;
-

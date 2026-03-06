@@ -23,6 +23,7 @@ import EmployerJobApplicants from "./pages/employer/EmployerJobApplicants";
 import Notifications from "./pages/Notifications";
 import HireWorker from "./pages/HireWorker";
 import HireSuccess from "./pages/HireSuccess";
+import ApplicationCard from "./pages/EmployerApplications";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/hire/:id" element={<HireWorker />} />
           <Route path="/hire-success/:id" element={<HireSuccess />} />
+          <Route path="/employer/applications" element={<ApplicationCard />} />
 
         </Routes>
       </main>
