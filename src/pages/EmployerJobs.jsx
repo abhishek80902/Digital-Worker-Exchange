@@ -1,5 +1,4 @@
-import React from "react";
-import { Briefcase, Users, Clock, CheckCircle, ArrowRight, MessageSquare } from "lucide-react";
+import { Briefcase, Users, Clock, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const EmployerJobs = () => {

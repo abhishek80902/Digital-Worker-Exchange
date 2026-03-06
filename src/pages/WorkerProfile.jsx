@@ -1,5 +1,4 @@
-import React from "react";
-import { MapPin, Star, ArrowLeft, CheckCircle, Briefcase, MessageSquare, Phone } from "lucide-react";
+import { MapPin, Star, ArrowLeft, Briefcase, MessageSquare} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -155,7 +154,7 @@ const WorkerProfile = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
             {worker.portfolio.map((img, idx) => (
               <div key={idx} className="w-full h-40 rounded-xl overflow-hidden border">
-                <img src={img} className="w-full h-full object-cover" />
+                <img src={img} alt="" className="w-full h-full object-cover" />
               </div>
             ))}
           </div>

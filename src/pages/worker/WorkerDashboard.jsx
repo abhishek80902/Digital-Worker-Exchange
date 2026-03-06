@@ -1,5 +1,5 @@
 import React from "react";
-import { MapPin, Briefcase, Heart, Star, Bell, ArrowRight } from "lucide-react";
+import {Briefcase, Heart, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const WorkerDashboard = () => {
