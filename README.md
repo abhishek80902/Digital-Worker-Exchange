@@ -1,31 +1,68 @@
-# React & Tailwind CSS Starter Pack
+Digital Worker Exchange (DWE)
 
-This is a starter pack for creating React projects with Tailwind CSS configured. It uses React version **18.2** and Tailwind CSS version **3.2**.
+A job marketplace platform designed to connect local workers and employers directly, reducing dependency on middlemen and helping workers access fair employment opportunities.
+The platform allows employers to post jobs and hire workers, while workers can discover nearby jobs and apply easily, improving employment accessibility.
 
-## Usage
+🌐 Live Demo
+🔗 https://digital-worker-exchange.vercel.app/
 
-This starter pack includes a basic setup for using **Tailwind CSS with React**. To start building your own components and styles, follow these steps:
+💻 GitHub Repository
+🐙 https://github.com/abhishek80902/Digital-Worker-Exchange
 
-1. Clone the repository to your local machine.
-    ```sh
-    git clone https://github.com/thepranaygupta/react-tailwind-css-starter-pack.git
-    ```
+🚀 Problem Statement
+In many local labor markets, middlemen control job distribution and often cut a portion of workers' wages. Workers also struggle to find nearby jobs quickly.
+Digital Worker Exchange (DWE) aims to solve this problem by creating a direct connection between employers and workers.
 
-1. Install the required packages.
-    ```sh
-    cd react-tailwind-css-starter-pack
-    npm install
-    ```
+👷 Worker Features
+Create a worker profile
+Discover nearby job opportunities
+View job details before applying
+Apply for jobs directly
+Communicate with employers through basic messaging
 
-1. Start the development server.
-    ```sh
-    npm start
-    ```
-1. Open the project in your browser at [`http://localhost:3000`](http://localhost:3000) to view your project.
-1. Create your React components and add your styles using Tailwind classes. You can also create new CSS files and import them into your components.
+🏢 Employer Features
+Post job opportunities
+View worker profiles, experience, and pricing
+Hire workers directly without intermediaries
+Manage job listings
 
-The project is set up to use `postcss-cli` to process your CSS files. You can add your own `tailwind.config.js` file to customize your Tailwind setup.
 
-## Contributing
+🛠 Tech Stack
+Frontend
+React.js
+HTML
+CSS
+JavaScript
 
-Contributions are welcome! If you have any suggestions or find any issues, please feel free to open an issue or a pull request.
+Backend
+Node.js
+Express.js
+Database
+MongoDB
+
+Deployment
+Vercel (Frontend)
+Render (Backend)
+
+⚙️ Installation and Setup
+1️⃣ Clone the repository
+git clone https://github.com/abhishek80902/Digital-Worker-Exchange.git
+cd Digital-Worker-Exchange
+2️⃣ Install dependencies
+
+Frontend:
+cd frontend
+npm install
+npm start
+
+Backend:
+cd backend
+npm install
+npm run dev
+
+📈 Future Improvements
+Real-time chat between workers and employers
+Location-based job recommendations
+Rating and review system
+Payment integration for secure transactions
+Mobile responsive enhancements
