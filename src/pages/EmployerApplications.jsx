@@ -16,7 +16,7 @@ const EmployerApplications = () => {
 
     const fetchApplications = async () => {
       const res = await fetch(
-        "http://localhost:5000/api/applications/employer",
+        "https://digital-worker-exchange.onrender.com/api/applications/employer",
         {
           headers: {
             Authorization: `Bearer ${token}`,

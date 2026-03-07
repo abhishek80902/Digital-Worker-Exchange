@@ -22,7 +22,7 @@ const FindWork = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/jobs");
+        const res = await fetch("https://digital-worker-exchange.onrender.com/api/jobs");
 
         if (!res.ok) {
           throw new Error("Failed to fetch jobs");

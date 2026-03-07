@@ -32,7 +32,7 @@ const [error, setError] = useState("");
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/workers", {
+      const res = await fetch("https://digital-worker-exchange.onrender.com/api/workers", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

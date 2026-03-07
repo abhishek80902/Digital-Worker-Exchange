@@ -18,7 +18,7 @@ const JobDetails = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/jobs/${id}`);
+        const res = await fetch(`https://digital-worker-exchange.onrender.com/api/jobs/${id}`);
         if (!res.ok) throw new Error("Failed to load job");
 
         const data = await res.json();
@@ -43,7 +43,7 @@ const JobDetails = () => {
 
       try {
         const res = await fetch(
-          `http://localhost:5000/api/applications/check/${job._id}`,
+          `https://digital-worker-exchange.onrender.com/api/applications/check/${job._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -79,7 +79,7 @@ const JobDetails = () => {
 
     try {
       const res = await fetch(
-        "http://localhost:5000/api/applications/apply",
+        "https://digital-worker-exchange.onrender.com/api/applications/apply",
         {
           method: "POST",
           headers: {
