@@ -1,31 +1,41 @@
-// src/hooks/useVoiceAssistant.js
 import { useEffect, useRef, useState } from "react";
 
 export default function useVoiceAssistant({ lang = "en-IN" } = {}) {
   const recognitionRef = useRef(null);
+
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
     if (!SpeechRecognition) {
-      setError("SpeechRecognition not supported in this browser.");
+      setError("Speech recognition not supported in this browser.");
       return;
     }
 
     const rec = new SpeechRecognition();
+
     rec.lang = lang;
-    rec.interimResults = false;
+    rec.interimResults = true; // 🔥 LIVE typing
+    rec.continuous = false;   // 🔥 single sentence
     rec.maxAlternatives = 1;
 
     rec.onresult = (e) => {
-      const txt = e.results[0][0].transcript;
-      setTranscript(txt);
+      let finalText = "";
+
+      for (let i = 0; i < e.results.length; i++) {
+        finalText += e.results[i][0].transcript;
+      }
+
+      setTranscript(finalText);
     };
 
     rec.onerror = (e) => {
       setError(e.error || "Speech recognition error");
+      setListening(false);
     };
 
     rec.onend = () => {
@@ -35,11 +45,11 @@ export default function useVoiceAssistant({ lang = "en-IN" } = {}) {
     recognitionRef.current = rec;
 
     return () => {
-      try {
+      if (rec) {
         rec.onresult = null;
         rec.onerror = null;
         rec.onend = null;
-      } catch (e) {}
+      }
     };
   }, [lang]);
 
@@ -48,11 +58,12 @@ export default function useVoiceAssistant({ lang = "en-IN" } = {}) {
       setError("SpeechRecognition not available");
       return;
     }
+
     try {
       recognitionRef.current.start();
       setListening(true);
-      setError(null);
       setTranscript("");
+      setError(null);
     } catch (e) {
       setError(e.message || "Could not start voice recognition");
     }

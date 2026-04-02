@@ -1,49 +1,47 @@
-// src/components/layout/ChatVoiceWidget.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useVoiceAssistant from "../../hooks/useVoiceAssistant";
 import { AnimatePresence, motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+const STORAGE_KEY = "dwe_chat_memory";
 
 export default function ChatVoiceWidget() {
+  const navigate = useNavigate();
+  const chatRef = useRef(null);
+
+  /* 🔥 LOAD MEMORY */
+  const [messages, setMessages] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            from: "ai",
+            text: "👋 Hi! I’m your DWE Assistant. Ask me anything!",
+          },
+        ];
+  });
+
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      from: "ai",
-      text: "👋 Hi! I can help you find work, post a job, or explore DWE features. Ask me anything!",
-    },
-  ]);
   const [input, setInput] = useState("");
   const [aiTyping, setAiTyping] = useState(false);
 
-  const { listening, transcript, error, start, stop } = useVoiceAssistant();
+  const { transcript, stop } = useVoiceAssistant();
 
-  /** Handle sending message */
-  const sendMessage = (text) => {
-    if (!text.trim()) return;
+  /* 🔥 SAVE MEMORY */
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  }, [messages]);
 
-    // Add user message
-    setMessages((prev) => [...prev, { from: "user", text }]);
-    setInput("");
-    triggerAIResponse(text);
-  };
+  /* 🔥 AUTO SCROLL */
+  useEffect(() => {
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, aiTyping]);
 
-  /** AI auto-response logic (mock for now) */
-  const triggerAIResponse = (userText) => {
-    setAiTyping(true);
-
-    setTimeout(() => {
-      // Simple smart mock reply
-      let reply = "I'm here to help!";
-
-      if (userText.toLowerCase().includes("work")) reply = "To find work, go to the *Find Work* page and search by skill or location.";
-      if (userText.toLowerCase().includes("post")) reply = "You can post a job from the *Post Job* page. AI will match workers instantly!";
-      if (userText.toLowerCase().includes("hire")) reply = "You can hire a worker by opening their profile and clicking *Hire Now*.";
-
-      setMessages((prev) => [...prev, { from: "ai", text: reply }]);
-      setAiTyping(false);
-    }, 900);
-  };
-
-  /** Voice input handler */
+  /* 🎤 VOICE */
   useEffect(() => {
     if (transcript) {
       sendMessage(transcript);
@@ -51,96 +49,147 @@ export default function ChatVoiceWidget() {
     }
   }, [transcript]);
 
+  /* 🔥 AI API */
+  const getAIReply = async (text) => {
+    try {
+      const res = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await res.json();
+      return data.reply;
+    } catch {
+      return "⚠️ Server error. Try again.";
+    }
+  };
+
+  /* 🔥 INTENT */
+  const handleIntent = async (text) => {
+    const t = text.toLowerCase();
+
+    if (t.includes("post") || t.includes("hire")) {
+      navigate("/postjob");
+      return "Redirecting you to Post Job ⚡";
+    }
+
+    if (t.includes("find") || t.includes("work")) {
+      navigate("/findwork");
+      return "Taking you to Find Work 🚀";
+    }
+
+    return await getAIReply(text);
+  };
+
+  /* 🔥 SEND */
+  const sendMessage = async (text) => {
+    if (!text.trim()) return;
+
+    setMessages((prev) => [...prev, { from: "user", text }]);
+    setInput("");
+    setAiTyping(true);
+
+    const reply = await handleIntent(text);
+
+    setMessages((prev) => [...prev, { from: "ai", text: reply }]);
+    setAiTyping(false);
+  };
+
   return (
     <>
-      {/* Floating Button */}
+      {/* FLOAT BUTTON */}
       <motion.button
         onClick={() => setOpen(true)}
         whileHover={{ scale: 1.1 }}
-        className="fixed right-6 bottom-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-orange-500 shadow-2xl flex items-center justify-center text-white text-3xl"
+        className="fixed right-6 bottom-6 z-50 w-16 h-16 rounded-full 
+        bg-gradient-to-br from-indigo-600 to-orange-500 
+        text-white text-2xl shadow-xl"
       >
-        💬
+        🤖
       </motion.button>
 
-      {/* Chat Window */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
-            className="fixed right-6 bottom-24 z-50 w-[420px] max-w-[95vw] h-[550px]
-              bg-white/90 backdrop-blur-xl border border-slate-200 shadow-2xl rounded-2xl flex flex-col"
+            className="fixed right-6 bottom-24 z-50 w-[400px] h-[580px]
+            bg-white/90 backdrop-blur-xl border border-gray-200
+            rounded-3xl shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
-            <div className="p-4 border-b border-slate-200 bg-white/70 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-orange-500 flex items-center justify-center text-xl text-white shadow">
-                  🤖
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-900">DWE Assistant</p>
-                  <p className="text-xs text-emerald-600">Online</p>
-                </div>
-              </div>
+            {/* HEADER */}
+            <div className="p-4 flex justify-between items-center bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+              <span className="font-semibold">DWE Assistant</span>
+              <button onClick={() => setOpen(false)}>×</button>
+            </div>
 
-              <button onClick={() => setOpen(false)} className="text-slate-500 text-xl">
-                ×
+            {/* 🔥 QUICK ACTION TAGS */}
+            <div className="px-4 py-3 flex gap-2 border-b bg-white">
+              <button
+                onClick={() => navigate("/findwork")}
+                className="px-4 py-1.5 rounded-full text-sm font-medium
+                bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+              >
+                Find Work →
+              </button>
+
+              <button
+                onClick={() => navigate("/postjob")}
+                className="px-4 py-1.5 rounded-full text-sm font-medium
+                bg-orange-100 text-orange-700 hover:bg-orange-200 transition"
+              >
+                Hire Worker →
               </button>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/60">
-              {messages.map((m, idx) => (
-                <div key={idx} className={`flex ${m.from === "user" ? "justify-end" : "justify-start"}`}>
+            {/* CHAT */}
+            <div
+              ref={chatRef}
+              className="flex-1 overflow-y-auto p-4 space-y-3"
+            >
+              {messages.map((m, i) => (
+                <div key={i} className={m.from === "user" ? "text-right" : ""}>
                   <div
-                    className={`px-4 py-2 rounded-xl max-w-[80%] shadow
-                      ${
-                        m.from === "user"
-                          ? "bg-gradient-to-r from-purple-600 to-orange-500 text-white"
-                          : "bg-white border border-slate-200 text-slate-800"
-                      }`}
+                    className={`inline-block px-4 py-2 rounded-2xl text-sm max-w-[75%]
+                    ${
+                      m.from === "user"
+                        ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
+                        : "bg-white border shadow-sm"
+                    }`}
                   >
                     {m.text}
                   </div>
                 </div>
               ))}
 
-              {/* Typing Indicator */}
               {aiTyping && (
-                <div className="flex justify-start">
-                  <div className="px-4 py-2 rounded-xl bg-white border border-slate-200 shadow">
-                    <span className="animate-pulse">•••</span>
-                  </div>
+                <div className="text-sm text-gray-500 animate-pulse">
+                  Typing...
                 </div>
               )}
             </div>
 
-            {/* Input Bar */}
-            <div className="p-3 border-t border-slate-200 bg-white flex items-center gap-2">
+            {/* INPUT */}
+            <div className="p-3 flex gap-2 border-t bg-white">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type here…"
-                className="flex-1 px-4 py-2 bg-slate-100 rounded-xl outline-none text-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") sendMessage(input);
+                }}
+                className="flex-1 px-4 py-2 rounded-full border outline-none focus:ring-2 focus:ring-indigo-400"
+                placeholder="Ask anything..."
               />
 
-              {/* Voice */}
-              <button
-                onClick={() => (listening ? stop() : start())}
-                className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
-                  listening ? "bg-rose-500" : "bg-slate-900"
-                }`}
-              >
-                🎤
-              </button>
-
-              {/* Send */}
               <button
                 onClick={() => sendMessage(input)}
-                className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-orange-500 text-white shadow"
+                className="px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md hover:scale-105 transition"
               >
-                ➤
+                Send
               </button>
             </div>
           </motion.div>
