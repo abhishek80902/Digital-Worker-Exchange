@@ -49,10 +49,10 @@ export default function ChatVoiceWidget() {
     }
   }, [transcript]);
 
-  /* 🔥 AI API */
+  /* AI API */
   const getAIReply = async (text) => {
     try {
-      const res = await fetch("http://localhost:5000/api/chat", {
+      const res = await fetch("https://digital-worker-exchange-1.onrender.com/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
