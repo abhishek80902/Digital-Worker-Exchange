@@ -1,49 +1,115 @@
-// src/components/sections/ZeroCommissionSection.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import Typewriter from "typewriter-effect";
+import { useNavigate } from "react-router-dom";
+
+const container = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.2 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5 },
+  },
+};
 
 const ZeroCommissionSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative isolate py-28 overflow-hidden">
 
-      {/* 🔥 PREMIUM BASE BACKGROUND */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-emerald-50/40 to-blue-50/40 z-0"></div>
 
-      {/* 🌈 BIG LEFT GLOW */}
-      <div className="absolute top-[-150px] left-[-120px] w-[500px] h-[500px] bg-emerald-200 blur-[140px] opacity-30 z-0"></div>
+      {/* FLOATING BLOBS */}
+      <motion.div
+        animate={{ y: [0, 40, 0] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute top-[-150px] left-[-120px] w-[500px] h-[500px] bg-emerald-200 blur-[140px] opacity-30 z-0"
+      />
 
-      {/* 🌈 BIG RIGHT GLOW */}
-      <div className="absolute bottom-[-150px] right-[-120px] w-[500px] h-[500px] bg-blue-200 blur-[140px] opacity-30 z-0"></div>
+      <motion.div
+        animate={{ y: [0, -40, 0] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute bottom-[-150px] right-[-120px] w-[500px] h-[500px] bg-blue-200 blur-[140px] opacity-30 z-0"
+      />
 
-      {/* 🌈 CENTER SOFT BLEND (NEW → MAKES IT PREMIUM) */}
-      <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-gradient-to-r from-emerald-100 to-blue-100 blur-[160px] opacity-20 -translate-x-1/2 -translate-y-1/2 z-0"></div>
-
-      {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
 
-        {/* 🔥 HEADER */}
-        <div className="text-center mb-20">
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center mb-20"
+        >
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             A Platform Built for{" "}
-            <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
-              Fairness & Efficiency
+            <span className="relative inline-block">
+
+              {/* 🔥 MOVING GRADIENT + TYPEWRITER */}
+              <span className="gradient-text">
+                <Typewriter
+                  options={{
+                    strings: ["Fairness", "Efficiency", "Trust"],
+                    autoStart: true,
+                    loop: true,
+                    delay: 60,
+                    deleteSpeed: 40,
+                  }}
+                />
+              </span>
+
+              {/* 🔥 CURVY UNDERLINE */}
+              <svg
+                viewBox="0 0 200 20"
+                className="absolute left-0 -bottom-3 w-full h-[10px]"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,10 Q50,20 100,10 T200,10"
+                  fill="none"
+                  stroke="url(#grad)"
+                  strokeWidth="3"
+                />
+                <defs>
+                  <linearGradient id="grad" x1="0" x2="1">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
             </span>
           </h2>
 
           <p className="mt-5 text-gray-600 max-w-2xl mx-auto text-lg">
             Empowering workers and employers with a transparent and direct ecosystem.
           </p>
-        </div>
+        </motion.div>
 
-        {/* 🔥 SPLIT SECTION */}
-        <div className="grid md:grid-cols-2 gap-8 relative">
+        {/* CARDS */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          className="grid md:grid-cols-2 gap-8"
+        >
 
-          {/* WORKERS SIDE */}
+          {/* WORKERS */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="relative p-10 rounded-3xl bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 shadow-xl overflow-hidden"
+            variants={item}
+            whileHover={{ y: -8, scale: 1.03 }}
+            className="group relative p-10 rounded-3xl bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 shadow-xl overflow-hidden transition"
           >
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"></div>
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-300 rounded-full blur-2xl opacity-30"></div>
 
             <span className="text-sm text-emerald-600 font-medium">
@@ -69,12 +135,13 @@ const ZeroCommissionSection = () => {
             </div>
           </motion.div>
 
-          {/* EMPLOYERS SIDE */}
+          {/* EMPLOYERS */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="relative p-10 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-xl overflow-hidden"
+            variants={item}
+            whileHover={{ y: -8, scale: 1.03 }}
+            className="group relative p-10 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-xl overflow-hidden transition"
           >
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition"></div>
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-300 rounded-full blur-2xl opacity-30"></div>
 
             <span className="text-sm text-blue-600 font-medium">
@@ -100,16 +167,53 @@ const ZeroCommissionSection = () => {
             </div>
           </motion.div>
 
-        </div>
+        </motion.div>
 
-        {/* 🔥 CTA */}
-        <div className="text-center mt-20">
-          <button className="px-12 py-5 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-semibold shadow-lg hover:shadow-2xl hover:-translate-y-1 transition">
+        {/* CTA */}
+        <motion.div className="text-center mt-20">
+          <motion.button
+            onClick={() => navigate("/select-role")}
+            whileHover={{ scale: 1.05 }}
+            animate={{
+              boxShadow: [
+                "0 0 0px",
+                "0 0 25px rgba(16,185,129,0.5)",
+                "0 0 0px",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="px-12 py-5 rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-semibold shadow-lg hover:shadow-2xl hover:-translate-y-1 transition"
+          >
             Join the Platform →
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
       </div>
+
+      {/* 🔥 GLOBAL STYLE FOR MOVING GRADIENT */}
+      <style jsx>{`
+        .gradient-text {
+          background: linear-gradient(270deg, #10b981, #14b8a6, #3b82f6);
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradientMove 4s ease infinite;
+          display: inline-block;
+        }
+
+        @keyframes gradientMove {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
+
     </section>
   );
 };

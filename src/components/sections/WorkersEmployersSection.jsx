@@ -1,8 +1,7 @@
-// src/components/sections/SocialProofSection.jsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-/* 🔥 COUNT-UP HOOK */
+/* COUNT-UP */
 const useCountUp = (end, duration = 1500) => {
   const [count, setCount] = useState(0);
 
@@ -67,7 +66,6 @@ const SocialProofSection = () => {
   const [active, setActive] = useState(0);
   const [openFAQ, setOpenFAQ] = useState(null);
 
-  /* 🔥 STATS */
   const workers = useCountUp(10000);
   const jobs = useCountUp(5000);
   const rating = 4.9;
@@ -84,21 +82,30 @@ const SocialProofSection = () => {
 
       {/* BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50/60 via-white to-slate-50/60 z-0"></div>
+
+      {/* GLOWS */}
       <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-blue-100 blur-[160px] opacity-20 -translate-x-1/2 -translate-y-1/2 z-0"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
 
         {/* HEADER */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 relative inline-block">
             Loved by{" "}
             <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
               Real Users
             </span>
-          </h2>
-        </div>
 
-        {/* 🔥 ANIMATED STATS */}
+            {/* CURVY UNDERLINE */}
+            <span className="absolute left-0 -bottom-2 w-full h-[3px] bg-gradient-to-r from-blue-500 to-teal-500 rounded-full opacity-70"></span>
+          </h2>
+        </motion.div>
+
+        {/* STATS */}
         <div className="grid md:grid-cols-3 gap-6 text-center mb-20">
           {[
             { value: workers, suffix: "+", label: "Workers Joined" },
@@ -110,7 +117,8 @@ const SocialProofSection = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.2 }}
-              className="p-6 rounded-2xl bg-white/70 backdrop-blur border border-gray-200 shadow-md"
+              whileHover={{ scale: 1.05 }}
+              className="p-6 rounded-2xl bg-white/70 backdrop-blur border border-white/40 shadow-lg"
             >
               <p className="text-3xl font-extrabold text-gray-900">
                 {stat.value}
@@ -123,34 +131,29 @@ const SocialProofSection = () => {
           ))}
         </div>
 
-        {/* 🔥 TESTIMONIAL */}
+        {/* TESTIMONIAL */}
         <div className="relative h-[280px] flex items-center justify-center mb-20">
-
           {testimonials.map((t, i) => {
             const isActive = i === active;
 
             return (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{
-                  opacity: isActive ? 1 : 0.4,
+                  opacity: isActive ? 1 : 0.3,
                   scale: isActive ? 1 : 0.9,
-                  y: isActive ? 0 : 20,
                 }}
                 transition={{ duration: 0.5 }}
                 className={`absolute w-full max-w-xl p-8 rounded-3xl backdrop-blur-xl border shadow-xl
-                  ${
-                    isActive
-                      ? "bg-white border-gray-200 z-20"
-                      : "bg-white/60 border-gray-100 z-10"
-                  }`}
+                ${
+                  isActive
+                    ? "bg-white border-gray-200 z-20"
+                    : "bg-white/50 border-gray-100 z-10"
+                }`}
               >
-                <div className="flex gap-1 text-yellow-400 mb-3">
-                  ★★★★★
-                </div>
+                <div className="text-yellow-400 mb-3">★★★★★</div>
 
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-gray-700 text-lg">
                   “{t.text}”
                 </p>
 
@@ -176,11 +179,6 @@ const SocialProofSection = () => {
           ))}
         </div>
 
-        {/* TRUST STRIP */}
-        <div className="text-center mb-20 text-sm text-gray-500">
-          Trusted by workers and employers across multiple industries
-        </div>
-
         {/* FAQ */}
         <div className="max-w-3xl mx-auto">
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
@@ -189,18 +187,19 @@ const SocialProofSection = () => {
 
           <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="rounded-2xl border border-gray-200 bg-white shadow-md"
+                whileHover={{ scale: 1.01 }}
+                className="rounded-2xl border border-gray-200 bg-white/80 backdrop-blur shadow-md"
               >
                 <button
                   onClick={() => setOpenFAQ(openFAQ === i ? null : i)}
-                  className="w-full px-5 py-4 flex justify-between items-center text-left"
+                  className="w-full px-5 py-4 flex justify-between items-center"
                 >
                   <span className="font-medium text-gray-900">
                     {faq.question}
                   </span>
-                  <span className="text-gray-400 text-lg">
+                  <span className="text-gray-400">
                     {openFAQ === i ? "−" : "+"}
                   </span>
                 </button>
@@ -210,7 +209,7 @@ const SocialProofSection = () => {
                     {faq.answer}
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

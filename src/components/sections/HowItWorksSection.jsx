@@ -1,4 +1,3 @@
-// src/components/sections/HowItWorksSection.jsx
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -21,51 +20,110 @@ const steps = [
   },
 ];
 
+// 🔥 STAGGER
+const container = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.18 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const HowItWorksSection = () => {
   return (
     <section className="relative isolate py-24 overflow-hidden">
 
-      {/* 🔥 PREMIUM BACKGROUND (NO GRID) */}
+      {/* 🔥 BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 z-0"></div>
 
-      {/* 🌈 SOFT TOP GLOW */}
-      <div className="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-blue-200 blur-[120px] opacity-25 z-0"></div>
+      {/* 🌈 FLOATING GLOWS */}
+      <motion.div
+        animate={{ y: [0, 30, 0] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-blue-200 blur-[120px] opacity-25 z-0"
+      />
 
-      {/* 🌈 SOFT BOTTOM GLOW */}
-      <div className="absolute bottom-[-120px] right-[-120px] w-[350px] h-[350px] bg-teal-200 blur-[120px] opacity-25 z-0"></div>
+      <motion.div
+        animate={{ y: [0, -30, 0] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute bottom-[-120px] right-[-120px] w-[350px] h-[350px] bg-teal-200 blur-[120px] opacity-25 z-0"
+      />
 
-      {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
 
-        {/* HEADER */}
-        <div className="text-center mb-20">
+        {/* 🔥 HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center mb-20"
+        >
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             How It{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-              Works
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+                Works
+              </span>
+
+              {/* 🔥 CURVY UNDERLINE */}
+              <svg
+                viewBox="0 0 200 20"
+                className="absolute left-0 -bottom-3 w-full h-[10px]"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,10 Q50,20 100,10 T200,10"
+                  fill="none"
+                  stroke="url(#gradient)"
+                  strokeWidth="3"
+                />
+                <defs>
+                  <linearGradient id="gradient" x1="0" x2="1">
+                    <stop offset="0%" stopColor="#2563eb" />
+                    <stop offset="100%" stopColor="#14b8a6" />
+                  </linearGradient>
+                </defs>
+              </svg>
             </span>
           </h2>
 
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">
             A simple and transparent process designed for speed and efficiency.
           </p>
-        </div>
+        </motion.div>
 
-        {/* 🔥 HORIZONTAL FLOW */}
-        <div className="relative">
+        {/* 🔥 FLOW */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          className="relative"
+        >
 
-          {/* LINE */}
-          <div className="absolute top-8 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-teal-500"></div>
+          {/* 🔥 ANIMATED LINE */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 1 }}
+            className="origin-left absolute top-8 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-teal-500"
+          />
 
           <div className="grid md:grid-cols-4 gap-10 relative">
 
             {steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.2 }}
-                className="text-center relative"
+                variants={item}
+                whileHover={{ y: -6, scale: 1.03 }}
+                className="text-center relative transition"
               >
 
                 {/* STEP CIRCLE */}
@@ -92,7 +150,7 @@ const HowItWorksSection = () => {
             ))}
 
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

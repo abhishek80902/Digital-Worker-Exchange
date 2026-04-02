@@ -1,4 +1,3 @@
-// src/components/sections/WageCalculatorSection.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -17,19 +16,17 @@ const WageCalculatorSection = () => {
   return (
     <section className="relative isolate py-28 overflow-hidden">
 
-      {/* 🔥 PREMIUM BACKGROUND */}
+      {/* BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-slate-50 to-white z-0"></div>
 
-      {/* 🌈 CENTER PREMIUM GLOW */}
+      {/* GLOWS */}
       <div className="absolute top-1/2 left-1/2 w-[700px] h-[700px] bg-gradient-to-r from-emerald-100 to-blue-100 blur-[160px] opacity-30 -translate-x-1/2 -translate-y-1/2 z-0"></div>
-
-      {/* 🌈 EDGE GLOW */}
       <div className="absolute top-[-120px] left-[-120px] w-[350px] h-[350px] bg-emerald-200 blur-[120px] opacity-20 z-0"></div>
       <div className="absolute bottom-[-120px] right-[-120px] w-[350px] h-[350px] bg-blue-200 blur-[120px] opacity-20 z-0"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
 
-        {/* 🔥 HEADER */}
+        {/* HEADER */}
         <div className="text-center mb-20">
           <span className="inline-block px-4 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full mb-4">
             Smart Earnings Tool
@@ -37,8 +34,34 @@ const WageCalculatorSection = () => {
 
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             Calculate Your{" "}
-            <span className="bg-gradient-to-r from-emerald-500 to-blue-500 bg-clip-text text-transparent">
-              True Earnings
+            <span className="relative inline-block">
+
+              {/* TEXT */}
+              <span className="bg-gradient-to-r from-emerald-500 via-teal-500 to-blue-500 bg-clip-text text-transparent">
+                True Earnings
+              </span>
+
+              {/* 🔥 CURVY UNDERLINE */}
+              <svg
+                viewBox="0 0 200 20"
+                className="absolute left-0 -bottom-3 w-full h-[10px]"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,10 Q50,20 100,10 T200,10"
+                  fill="none"
+                  stroke="url(#grad2)"
+                  strokeWidth="3"
+                />
+                <defs>
+                  <linearGradient id="grad2" x1="0" x2="1">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="50%" stopColor="#14b8a6" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
             </span>
           </h2>
 
@@ -47,19 +70,18 @@ const WageCalculatorSection = () => {
           </p>
         </div>
 
-        {/* 🔥 MAIN GRID */}
+        {/* GRID */}
         <div className="grid lg:grid-cols-2 gap-10">
 
-          {/* 💎 LEFT PANEL */}
+          {/* LEFT PANEL */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="relative p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-gray-200 shadow-xl"
+            whileHover={{ scale: 1.01 }}
+            className="relative p-8 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl overflow-hidden"
           >
-            {/* TOP ACCENT LINE */}
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-500 rounded-t-3xl"></div>
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-emerald-500 to-teal-500 opacity-5"></div>
 
-            {/* INPUTS */}
             <div className="space-y-5">
               <div>
                 <label className="text-sm text-gray-600">
@@ -69,7 +91,7 @@ const WageCalculatorSection = () => {
                   type="number"
                   value={dailyRate}
                   onChange={(e) => setDailyRate(Number(e.target.value) || 0)}
-                  className="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500"
+                  className="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200 bg-white/80 focus:ring-2 focus:ring-emerald-500 outline-none transition"
                 />
               </div>
 
@@ -87,43 +109,46 @@ const WageCalculatorSection = () => {
                       Math.min(7, Math.max(1, Number(e.target.value) || 1))
                     )
                   }
-                  className="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500"
+                  className="w-full mt-1 px-4 py-3 rounded-xl border border-gray-200 bg-white/80 focus:ring-2 focus:ring-blue-500 outline-none transition"
                 />
               </div>
             </div>
 
-            {/* QUICK PRESETS */}
             <div className="mt-6 flex gap-3 flex-wrap">
               {[500, 800, 1200].map((val) => (
                 <button
                   key={val}
                   onClick={() => setDailyRate(val)}
-                  className="px-4 py-2 text-sm rounded-full bg-gray-100 hover:bg-gray-200 transition"
+                  className="px-4 py-2 text-sm rounded-full bg-gray-100 hover:bg-gray-200 hover:scale-105 transition"
                 >
                   ₹{val}
                 </button>
               ))}
             </div>
 
-            {/* BUTTON */}
-            <button className="mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow-md hover:shadow-xl hover:-translate-y-1 transition">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              className="mt-8 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold shadow-md hover:shadow-xl hover:-translate-y-1 transition"
+            >
               Calculate Earnings →
-            </button>
+            </motion.button>
 
-            {/* TRUST BOX */}
             <div className="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-gray-700">
-              💡 You earn <span className="font-semibold">₹{extraEarned}</span> more every month with zero commission.
+              💡 You earn{" "}
+              <span className="font-semibold text-emerald-600">
+                ₹{extraEarned}
+              </span>{" "}
+              more every month with zero commission.
             </div>
           </motion.div>
 
-          {/* 📊 RIGHT PANEL */}
+          {/* RIGHT PANEL */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
 
-            {/* MAIN RESULT */}
             <div className="relative p-8 rounded-3xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 shadow-lg">
               <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-5 rounded-3xl"></div>
 
@@ -134,7 +159,6 @@ const WageCalculatorSection = () => {
               <p className="text-xs text-gray-500 mt-1">Based on your inputs</p>
             </div>
 
-            {/* COMPARISON */}
             <div className="grid grid-cols-2 gap-4">
               <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200">
                 <p className="text-xs text-gray-500">Without Platform</p>
@@ -151,8 +175,7 @@ const WageCalculatorSection = () => {
               </div>
             </div>
 
-            {/* EXTRA */}
-            <div className="p-5 rounded-2xl bg-blue-50 border border-blue-100">
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-100">
               <p className="text-sm text-gray-600">
                 Extra earnings saved:
               </p>

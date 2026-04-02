@@ -1,4 +1,3 @@
-// src/components/sections/FeaturesSection.jsx
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -30,44 +29,82 @@ const features = [
   },
 ];
 
+// 🔥 STAGGER CONTAINER
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+// 🔥 ITEM ANIMATION
+const item = {
+  hidden: { opacity: 0, y: 40, scale: 0.97 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const FeaturesSection = () => {
   return (
     <section className="relative isolate py-24 overflow-hidden">
 
-      {/* 🔥 PREMIUM BACKGROUND (NO GRID) */}
+      {/* 🔥 BACKGROUND */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white z-0"></div>
 
-      {/* 🌈 SOFT GLOW LEFT */}
-      <div className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-blue-200 blur-[140px] opacity-30 z-0"></div>
+      {/* 🌈 FLOATING GLOWS */}
+      <motion.div
+        animate={{ y: [0, 40, 0] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute top-[-120px] left-[-120px] w-[400px] h-[400px] bg-blue-200 blur-[140px] opacity-30 z-0"
+      />
 
-      {/* 🌈 SOFT GLOW RIGHT */}
-      <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-emerald-200 blur-[140px] opacity-30 z-0"></div>
+      <motion.div
+        animate={{ y: [0, -40, 0] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-emerald-200 blur-[140px] opacity-30 z-0"
+      />
 
-      {/* CONTENT */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
 
         {/* 🔥 HEADER */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 relative inline-block">
             Built for{" "}
             <span className="bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
               Speed, Trust & Simplicity
             </span>
+
+            {/* 🔥 GRADIENT UNDERLINE */}
+            <span className="absolute left-0 -bottom-2 w-full h-[3px] bg-gradient-to-r from-blue-600 to-teal-500 rounded-full opacity-70"></span>
           </h2>
 
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">
             Everything you need to connect workers and employers seamlessly.
           </p>
-        </div>
+        </motion.div>
 
         {/* 🔥 MAIN GRID */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          className="grid lg:grid-cols-3 gap-8"
+        >
 
           {/* ⭐ CORE FEATURE */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="lg:col-span-2 p-8 rounded-2xl bg-gradient-to-br from-blue-600 to-teal-500 text-white shadow-lg relative overflow-hidden"
+            variants={item}
+            className="lg:col-span-2 p-8 rounded-2xl bg-gradient-to-br from-blue-600 to-teal-500 text-white shadow-lg relative overflow-hidden hover:scale-[1.01] transition"
           >
             <span className="text-xs uppercase tracking-wide text-white/70">
               Core Feature
@@ -93,6 +130,7 @@ const FeaturesSection = () => {
               ))}
             </div>
 
+            {/* ✅ COUNTING (UNCHANGED) */}
             <div className="flex gap-6 mt-6 text-sm">
               <div>
                 <p className="font-semibold text-white">95%</p>
@@ -116,10 +154,8 @@ const FeaturesSection = () => {
             {features.slice(0, 2).map((f, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.2 }}
-                className="group relative p-6 rounded-2xl bg-white shadow-md border border-gray-100 translate-y-[-2px] hover:translate-y-[-4px] hover:shadow-xl transition duration-300"
+                variants={item}
+                className="group relative p-6 rounded-2xl bg-white shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] transition duration-300"
               >
                 <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-teal-500 rounded-t-2xl opacity-70"></div>
 
@@ -155,10 +191,8 @@ const FeaturesSection = () => {
             {features.slice(2).map((f, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className="group relative p-6 rounded-2xl bg-white shadow-md border border-gray-100 translate-y-[-2px] hover:translate-y-[-4px] hover:shadow-xl transition duration-300"
+                variants={item}
+                className="group relative p-6 rounded-2xl bg-white shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] transition duration-300"
               >
                 <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-teal-500 rounded-t-2xl opacity-70"></div>
 
@@ -189,7 +223,7 @@ const FeaturesSection = () => {
             ))}
           </div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );
